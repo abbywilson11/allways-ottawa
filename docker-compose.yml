@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgis/postgis:15-3.4
+    platform: linux/amd64
+    container_name: allways_postgres
+    environment:
+      POSTGRES_USER: allways
+      POSTGRES_PASSWORD: allways_dev
+      POSTGRES_DB: allways_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U allways -d allways_db']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
